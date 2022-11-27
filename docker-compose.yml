@@ -5,12 +5,15 @@ services:
     container_name: app
     build:
       context: .
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=admin2
+      - DJANGO_SUPERUSER_PASSWORD=27474129
     ports:
       - "8000:8000"
     volumes:
       - .:/sources/
 
-    command: bash -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python3 manage.py migrate && python3 manage.py createsuperuser --email=admin@admin.com --noinput && python3 manage.py runserver 0.0.0.0:8000"
 
     depends_on:
       - postgres
@@ -24,8 +27,6 @@ services:
     container_name: postgres
     image: postgres
     restart: always
-    volumes:
-      - postgres:/var/lib/postgresql
     environment:
       POSTGRES_PASSWORD: "27474129"
       POSTGRES_USER: postgres
@@ -34,7 +35,7 @@ services:
     networks:
       - projectnetwork
     ports:
-      - '54321:5432'
+      - '54322:5432'
 
   adminer:
     container_name: adminer
@@ -46,9 +47,6 @@ services:
       - postgres
     networks:
       - projectnetwork
-
-volumes:
-  postgres: null
 
 networks:
   projectnetwork:

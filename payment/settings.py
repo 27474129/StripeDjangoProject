@@ -71,7 +71,7 @@ DATABASES = {
         'USER': config.DB_USERNAME,
         'PASSWORD': config.DB_PASSWORD,
         'HOST': "postgres",
-        'PORT': '5432',
+        'PORT': "5432",
     }
 }
 

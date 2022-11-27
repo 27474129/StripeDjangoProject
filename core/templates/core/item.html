@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ item_data.name }}</title>
+    <script type="text/javascript" src="https://js.stripe.com/v3"></script>
 </head>
 <body>
     <h1>{{ item_data.name }}</h1>
     <p>{{ item_data.description }}</p>
     <span>{{ item_data.price }}</span><br>
-    <button>Buy</button>
+    <button class="form_text">Buy</button>
 </body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $('.form_text').click(function() {
+        var stripe = Stripe('pk_test_51M80oLI26erAkqnm5Pqok2mL6hb3adLZxWjsG2xdo7wYJaZwxghHuAWlaMp5iiGMHXfu1cDxMmawlP4eMxIUCWBq00CZSRDAqO');
+
+        var hrefOfLocation = $(location).attr('href').split('/');
+        hrefOfLocation = hrefOfLocation[hrefOfLocation.length - 1];
+
+        $.get(
+            'http://0.0.0.0:8000/buy/' + hrefOfLocation,
+            function(data) {
+                if (data['success']) {
+                    var session_id = data['response']['session']['id'];
+
+                    stripe.redirectToCheckout({
+                        sessionId: session_id
+                    })
+                    .then(function(result){
+
+                    });
+                }
+            }
+        )
+    })
+</script>
 </html>
